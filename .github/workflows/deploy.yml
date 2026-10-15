@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy PDFix to GitHub Pages
 
 on:
   push:
@@ -23,10 +23,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Vendor OCR engine (v7 files from node_modules + traineddata)
+      - name: Vendor OCR engine
         run: npm run vendor:ocr
 
-      - name: Vendor qpdf WASM (Web unlock only)
+      - name: Vendor qpdf WASM
         run: |
           mkdir -p public/qpdf
           cp node_modules/qpdf-run/src/worker.js public/qpdf/worker.js
@@ -36,9 +36,9 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_BASE: /PaperKnife/
+          VITE_BASE: /PDFix/
 
-      - name: Strip dead bundled qpdf wasm (runtime uses public/qpdf/)
+      - name: Strip unused bundled qpdf wasm
         run: rm -f dist/assets/qpdf-*.wasm
 
       - name: Deploy
